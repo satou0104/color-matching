@@ -119,21 +119,24 @@ body {
 
 .btn-back, .btn-retry {
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
+  color: #a0a0b0;
   padding: 0;
-  font-size: 18px;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.2s;
 }
 
+.btn-back svg, .btn-retry svg {
+  display: block;
+}
+
 .btn-back:active, .btn-retry:active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   transform: scale(0.95);
 }
 
