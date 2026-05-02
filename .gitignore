@@ -45,3 +45,8 @@ yarn-error.log*
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# 開発用ドキュメント（非公開）
+APP_STORE_METADATA.md
+DEVELOPMENT.md
+.kiro/
