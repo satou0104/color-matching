@@ -1,0 +1,47 @@
+# 証明書ファイル
+*.key
+*.p12
+*.pem
+*.cer
+*.mobileprovision
+
+# 依存関係
+node_modules/
+ios/App/Pods/
+DerivedData/
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ビルド成果物
+*.ipa
+*.app
+*.dSYM.zip
+*.dSYM
+
+# Xcode
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# ログ
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

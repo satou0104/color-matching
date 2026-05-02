@@ -1,0 +1,19 @@
+{
+  "name": "color-matching",
+  "version": "1.0.0",
+  "description": "カラーマッチング - RGB色合わせパズルゲーム",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["color", "puzzle", "rgb", "game"],
+  "author": "satou0104",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor-community/admob": "^7.0.3",
+    "@capacitor/local-notifications": "^7.0.0"
+  }
+}

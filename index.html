@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>カラーマッチング</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ホーム画面 -->
+  <div class="screen no-transition" id="home-screen">
+    <div class="home-content">
+      <div class="color-palette-icon">
+        <div class="palette-circle" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);"></div>
+        <div class="palette-circle" style="background: linear-gradient(135deg, #51cf66 0%, #69db7c 100%);"></div>
+        <div class="palette-circle" style="background: linear-gradient(135deg, #4dabf7 0%, #74c0fc 100%);"></div>
+      </div>
+      <h1 class="logo">カラーマッチング</h1>
+      <p class="subtitle">RGB で色を再現するパズル</p>
+      <button class="btn-play" onclick="showStageSelect()">START</button>
+      <button class="btn-howto" onclick="showHowToPlay()">遊び方</button>
+      <div class="home-progress">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+        <p class="progress-label"><span id="cleared-count">0</span> / 100 ステージクリア</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ステージ選択画面 -->
+  <div class="screen" id="stage-select-screen">
+    <div class="header">
+      <button class="btn-back" onclick="showHome()">← 戻る</button>
+      <h2>ステージ選択</h2>
+      <div></div>
+    </div>
+    <div class="stage-grid" id="stage-grid"></div>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div class="screen" id="game-screen">
+    <div class="header">
+      <button class="btn-back" onclick="backToStageSelect()">← 戻る</button>
+      <h2 id="stage-title">Stage 1</h2>
+      <div></div>
+    </div>
+    
+    <div class="game-content">
+      <div class="color-display-area">
+        <div class="color-label">目標の色</div>
+        <div class="color-box" id="target-color"></div>
+      </div>
+      
+      <div class="color-display-area">
+        <div class="color-label">あなたの色</div>
+        <div class="color-box" id="current-color"></div>
+      </div>
+      
+      <div class="color-diff-meter" id="color-diff-meter" style="display: none;">
+        <div class="meter-label">色の近さ</div>
+        <div class="meter-bar">
+          <div class="meter-fill" id="meter-fill"></div>
+        </div>
+        <div class="meter-text" id="meter-text">調整してください</div>
+      </div>
+      
+      <div class="medal-standards">
+        <div class="standard-item gold">
+          <span class="star">★★★</span>
+          <span class="value">5</span>
+        </div>
+        <div class="standard-divider">/</div>
+        <div class="standard-item silver">
+          <span class="star">★★</span>
+          <span class="value">10</span>
+        </div>
+        <div class="standard-divider">/</div>
+        <div class="standard-item bronze">
+          <span class="star">★</span>
+          <span class="value">15</span>
+        </div>
+      </div>
+      
+      <div class="sliders">
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label red">R</span>
+            <span class="slider-value" id="r-value">128</span>
+          </div>
+          <input type="range" min="0" max="255" value="128" class="slider red-slider" id="r-slider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label green">G</span>
+            <span class="slider-value" id="g-value">128</span>
+          </div>
+          <input type="range" min="0" max="255" value="128" class="slider green-slider" id="g-slider">
+        </div>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span class="slider-label blue">B</span>
+            <span class="slider-value" id="b-value">128</span>
+          </div>
+          <input type="range" min="0" max="255" value="128" class="slider blue-slider" id="b-slider">
+        </div>
+      </div>
+      
+      <div class="game-buttons">
+        <button class="btn-hint" onclick="showHintDialog()">ヒント</button>
+        <button class="btn-submit" onclick="submitAnswer()">決定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- クリア画面 -->
+  <div class="screen" id="clear-screen">
+    <div class="clear-content">
+      <h2>クリア！</h2>
+      <div class="stars" id="clear-stars"></div>
+      <div class="clear-stats">
+        <p>色差: <span id="clear-diff">0</span></p>
+        <p>銅基準: <span id="clear-tolerance">15</span> 以内</p>
+      </div>
+      <div class="clear-buttons">
+        <button class="btn-primary" onclick="nextStage()">次のステージ</button>
+        <button class="btn-secondary" onclick="showStageSelect()">ステージ選択</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 失敗画面 -->
+  <div class="screen" id="fail-screen">
+    <div class="fail-content">
+      <h2>失敗</h2>
+      <p>クリア基準に届きませんでした</p>
+      <div class="fail-stats">
+        <p>色差: <span id="fail-diff">0</span></p>
+        <p>銅基準: <span id="fail-tolerance">15</span> 以内</p>
+      </div>
+      <div class="fail-buttons">
+        <button class="btn-primary" onclick="retryStage()">リトライ</button>
+        <button class="btn-secondary" onclick="showStageSelect()">ステージ選択</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 遊び方画面 -->
+  <div class="screen" id="howto-screen">
+    <div class="header">
+      <button class="btn-back" onclick="showHome()">← 戻る</button>
+      <h2>遊び方</h2>
+      <div></div>
+    </div>
+    <div class="howto-content">
+      <h3>ゲームの目的</h3>
+      <p>目標の色を見て、RGBスライダーを調整して同じ色を再現しよう！</p>
+      
+      <h3>操作方法</h3>
+      <p>・R（赤）・G（緑）・B（青）のスライダーを動かして色を作ります</p>
+      <p>・色の近さメーターで目標との差を確認できます</p>
+      <p>・決定ボタンを押してクリア！</p>
+      
+      <h3>評価基準</h3>
+      <p>金: 色差5以内（完璧）</p>
+      <p>銀: 色差10以内（素晴らしい）</p>
+      <p>銅: 色差15以内（クリア）</p>
+      <p>失敗: 色差15より大きい</p>
+      
+      <h3>ヒント機能</h3>
+      <p>困ったときはヒントボタンで色の近さメーターを表示できます</p>
+      <p>メーターで目標色との距離をリアルタイムで確認できます</p>
+    </div>
+  </div>
+
+  <!-- ヒント確認ダイアログ -->
+  <div class="dialog-overlay" id="hint-dialog">
+    <div class="dialog-box">
+      <h3>ヒントを使用しますか？</h3>
+      <p id="hint-desc">色の近さメーターを表示します</p>
+      <div class="dialog-buttons">
+        <button class="btn-primary" onclick="useHint()">使う</button>
+        <button class="btn-secondary" onclick="closeHintDialog()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@capacitor/core@7/dist/capacitor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

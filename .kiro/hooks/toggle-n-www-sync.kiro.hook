@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Toggle-N: www → root コピーリマインド",
+  "description": "toggle-n/www/ 内のファイルを編集したとき、ルート直下の同名ファイルへのコピーを促す",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "toggle-n/www/*.js",
+      "toggle-n/www/*.css",
+      "toggle-n/www/*.html"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "toggle-n/www/ 内のファイルが編集されました。ルート直下の同名ファイルにもコピーが必要です。以下のコマンドを実行してください：\nCopy-Item toggle-n/www/app.js toggle-n/app.js\nCopy-Item toggle-n/www/style.css toggle-n/style.css\nCopy-Item toggle-n/www/index.html toggle-n/index.html\nユーザーにこのコピーが必要であることを伝えてください。"
+  }
+}
