@@ -80,7 +80,7 @@ body {
 
 
 /* ボタン */
-.btn-primary, .btn-secondary, .btn-back, .btn-hint, .btn-submit {
+.btn-primary, .btn-secondary, .btn-back, .btn-retry, .btn-hint, .btn-submit {
   padding: 14px 28px;
   border: none;
   border-radius: 12px;
@@ -111,14 +111,20 @@ body {
   transform: scale(0.98);
 }
 
-.btn-back {
+.btn-back, .btn-retry {
   background: transparent;
   color: var(--text);
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: 8px;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
 }
 
-.btn-back:active {
+.btn-back:active, .btn-retry:active {
   background: var(--border);
 }
 
