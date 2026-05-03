@@ -24,16 +24,13 @@
 html, body {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 body {
@@ -53,6 +50,8 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
   transform: translateY(20px);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .screen.active {
@@ -71,7 +70,6 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  padding-top: calc(16px + env(safe-area-inset-top));
   background: rgba(10, 10, 15, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   flex-shrink: 0;
@@ -89,7 +87,6 @@ body {
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-
 
 
 /* ボタン */
@@ -178,8 +175,6 @@ body {
   height: 100%;
   gap: 20px;
   padding: 40px 20px;
-  padding-top: calc(40px + env(safe-area-inset-top));
-  padding-bottom: calc(40px + env(safe-area-inset-bottom));
 }
 
 .color-palette-icon {
@@ -335,7 +330,6 @@ body {
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
   padding: 16px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom));
   overflow-y: auto;
 }
 
@@ -397,10 +391,8 @@ body {
   display: flex;
   flex-direction: column;
   padding: 16px;
-  padding-bottom: calc(16px + env(safe-area-inset-bottom));
-  gap: 12px;
+  gap: 16px;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .color-display-area {
@@ -418,7 +410,7 @@ body {
 
 .color-box {
   width: 100%;
-  height: 80px;
+  height: 100px;
   border-radius: 12px;
   border: 2px solid var(--border);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -426,19 +418,13 @@ body {
 
 /* 色差メーター */
 .color-diff-meter {
-  display: flex;
+  display: none;
   flex-direction: column;
-  gap: 6px;
-  position: relative;
-  z-index: 1;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  gap: 8px;
 }
 
 .color-diff-meter.visible {
-  visibility: visible;
-  opacity: 1;
+  display: flex;
 }
 
 .meter-label {
@@ -454,7 +440,6 @@ body {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--border);
-  pointer-events: none;
 }
 
 .meter-fill {
@@ -462,7 +447,6 @@ body {
   background: linear-gradient(to right, var(--success), var(--warning), var(--danger));
   transition: width 0.3s ease;
   width: 0%;
-  pointer-events: none;
 }
 
 .meter-text {
@@ -470,8 +454,8 @@ body {
   text-align: center;
   color: var(--text-dim);
   font-weight: 600;
-  pointer-events: none;
 }
+
 
 /* メダル基準表示 */
 .medal-standards {
@@ -541,15 +525,13 @@ body {
 .sliders {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  position: relative;
-  z-index: 10;
+  gap: 16px;
 }
 
 .slider-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .slider-header {
@@ -583,26 +565,22 @@ body {
   border-radius: 4px;
   outline: none;
   cursor: pointer;
-  position: relative;
-  z-index: 10;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: white;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  position: relative;
-  z-index: 10;
 }
 
 .slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: white;
   cursor: pointer;
@@ -638,8 +616,6 @@ body {
   height: 100%;
   gap: 20px;
   padding: 20px;
-  padding-top: calc(20px + env(safe-area-inset-top));
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
 
 .clear-content h2 {
@@ -735,7 +711,6 @@ body {
 .howto-content {
   flex: 1;
   padding: 20px;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   overflow-y: auto;
 }
 

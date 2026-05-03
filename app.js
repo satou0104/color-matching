@@ -104,7 +104,6 @@ function saveBestScore(stageId, data) {
   
   if (existing) {
     const existingData = JSON.parse(existing);
-    // より良いスコアの場合のみ保存
     if (data.stars > existingData.stars || 
         (data.stars === existingData.stars && data.diff < existingData.diff)) {
       localStorage.setItem(key, JSON.stringify(data));
@@ -166,8 +165,6 @@ function backToStageSelect() {
 function updateHomeProgress() {
   const cleared = getClearedStages().length;
   document.getElementById('cleared-count').textContent = cleared;
-  
-  // プログレスバーを更新
   const percentage = (cleared / 100) * 100;
   document.getElementById('progress-bar').style.width = percentage + '%';
 }
@@ -193,7 +190,6 @@ function renderStageGrid() {
         const starsDiv = document.createElement('div');
         starsDiv.className = 'stage-stars';
         
-        // 星の色を設定
         if (best.stars === 3) {
           starsDiv.classList.add('gold');
           starsDiv.textContent = '★★★';
@@ -221,40 +217,30 @@ function startStage(stageId) {
   currentStage = stageId;
   const stage = stages[stageId - 1];
   
-  // 画面表示
   showScreen('game-screen');
   
-  // ステージ情報表示
-  document.getElementById('stage-title').textContent = `Stage ${stageId}`;
+  document.getElementById('stage-title').textContent = 'Stage ' + stageId;
   
-  // 色差基準を表示
   document.querySelector('.standard-item.gold .value').textContent = stage.goldThreshold;
   document.querySelector('.standard-item.silver .value').textContent = stage.silverThreshold;
   document.querySelector('.standard-item.bronze .value').textContent = stage.bronzeThreshold;
   
-  // 目標色を表示
   const targetBox = document.getElementById('target-color');
-  targetBox.style.backgroundColor = `rgb(${stage.targetColor.r}, ${stage.targetColor.g}, ${stage.targetColor.b})`;
+  targetBox.style.backgroundColor = 'rgb(' + stage.targetColor.r + ', ' + stage.targetColor.g + ', ' + stage.targetColor.b + ')';
   
-  // スライダーを中央値にリセット
   document.getElementById('r-slider').value = 128;
   document.getElementById('g-slider').value = 128;
   document.getElementById('b-slider').value = 128;
   
-  // ヒント使用状況をリセット
   hintUsed = false;
   
-  // ヒントボタンを有効化
   const hintBtn = document.querySelector('.btn-hint');
   hintBtn.disabled = false;
   hintBtn.style.opacity = '1';
   hintBtn.style.cursor = 'pointer';
   
-  // 色の近さメーターを非表示
-  const meterElement = document.getElementById('color-diff-meter');
-  meterElement.classList.remove('visible');
+  document.getElementById('color-diff-meter').classList.remove('visible');
   
-  // 色を更新
   updateCurrentColor();
 }
 
@@ -263,32 +249,25 @@ function updateCurrentColor() {
   const g = parseInt(document.getElementById('g-slider').value);
   const b = parseInt(document.getElementById('b-slider').value);
   
-  // 色を表示
   const currentBox = document.getElementById('current-color');
-  currentBox.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+  currentBox.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ')';
   
-  // RGB数値表示
   document.getElementById('r-value').textContent = r;
   document.getElementById('g-value').textContent = g;
   document.getElementById('b-value').textContent = b;
   
-  // ヒント使用時のみ色差を表示
   if (hintUsed) {
     const stage = stages[currentStage - 1];
-    const diff = calculateColorDifference(
-      { r, g, b },
-      stage.targetColor
-    );
+    const diff = calculateColorDifference({ r, g, b }, stage.targetColor);
     updateColorDiffMeter(diff);
   }
 }
 
 function updateColorDiffMeter(diff) {
-  const maxDiff = 441; // sqrt(255^2 * 3) ≈ 441
+  const maxDiff = 441;
   const percentage = Math.max(0, 100 - (diff / maxDiff * 100));
   
-  const fill = document.getElementById('meter-fill');
-  fill.style.width = percentage + '%';
+  document.getElementById('meter-fill').style.width = percentage + '%';
   
   const text = document.getElementById('meter-text');
   if (diff <= 5) {
@@ -318,27 +297,19 @@ function submitAnswer() {
   const b = parseInt(document.getElementById('b-slider').value);
   
   const stage = stages[currentStage - 1];
-  const diff = calculateColorDifference(
-    { r, g, b },
-    stage.targetColor
-  );
+  const diff = calculateColorDifference({ r, g, b }, stage.targetColor);
   
   const stars = getStars(diff, stage);
   
   if (stars > 0) {
-    // 銅以上でクリア
     saveBestScore(currentStage, { diff: Math.round(diff), stars });
     consecutiveClear++;
     showClearScreen(stars, Math.round(diff), stage.bronzeThreshold);
     
-    // 5ステージ連続クリアでインタースティシャル広告
     if (consecutiveClear % 5 === 0) {
-      setTimeout(() => {
-        showInterstitialAd();
-      }, 1500);
+      setTimeout(function() { showInterstitialAd(); }, 1500);
     }
   } else {
-    // 銅未満は失敗
     showFailScreen(Math.round(diff), stage.bronzeThreshold);
   }
 }
@@ -349,14 +320,13 @@ function submitAnswer() {
 function showClearScreen(stars, diff, tolerance) {
   showScreen('clear-screen');
   
-  // 銅・銀・金の星表示
-  let starsHTML = '';
+  var starsHTML = '';
   if (stars === 3) {
-    starsHTML = '<span class="star gold">★★★</span>'; // 金
+    starsHTML = '<span class="star gold">★★★</span>';
   } else if (stars === 2) {
-    starsHTML = '<span class="star silver">★★</span>'; // 銀
+    starsHTML = '<span class="star silver">★★</span>';
   } else if (stars === 1) {
-    starsHTML = '<span class="star bronze">★</span>'; // 銅
+    starsHTML = '<span class="star bronze">★</span>';
   }
   
   document.getElementById('clear-stars').innerHTML = starsHTML;
@@ -389,10 +359,7 @@ function retryStage() {
 // ヒント機能
 // ========================================
 function showHintDialog() {
-  if (hintUsed) {
-    return; // 既に使用済みの場合は何もしない
-  }
-  
+  if (hintUsed) return;
   document.getElementById('hint-desc').textContent = '色の近さメーターを表示します';
   document.getElementById('hint-dialog').classList.add('active');
 }
@@ -405,7 +372,7 @@ async function useHint() {
   closeHintDialog();
   
   try {
-    const { AdMob } = Capacitor.Plugins;
+    const AdMob = Capacitor.Plugins.AdMob;
     if (!AdMob) {
       applyHint();
       return;
@@ -419,45 +386,32 @@ async function useHint() {
     }
   } catch (e) {
     console.log('広告エラー:', e);
-    applyHint(); // 広告失敗時もヒント表示
+    applyHint();
   }
 }
 
 function applyHint() {
   hintUsed = true;
   
-  // 色の近さメーターを表示
-  const meterElement = document.getElementById('color-diff-meter');
-  meterElement.classList.add('visible');
+  document.getElementById('color-diff-meter').classList.add('visible');
   
-  // ヒントボタンをグレーアウト
-  const hintBtn = document.querySelector('.btn-hint');
+  var hintBtn = document.querySelector('.btn-hint');
   hintBtn.disabled = true;
   hintBtn.style.opacity = '0.5';
   hintBtn.style.cursor = 'not-allowed';
   
-  // 現在の色差を更新
   updateCurrentColor();
-  
-  // iOS WebView: 広告・ダイアログ表示後のviewport変動を修正
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    const gameContent = document.querySelector('.game-content');
-    if (gameContent) gameContent.scrollTop = 0;
-  }, 100);
 }
+
+// ========================================
+// AdMob初期化
 // ========================================
 async function initAdMob() {
   try {
-    const { AdMob } = Capacitor.Plugins;
+    const AdMob = Capacitor.Plugins.AdMob;
     if (!AdMob) return;
     
-    await AdMob.initialize({
-      requestTrackingAuthorization: false
-    });
-    
+    await AdMob.initialize({ requestTrackingAuthorization: false });
     console.log('AdMob初期化完了');
   } catch (e) {
     console.log('AdMob初期化エラー:', e);
@@ -466,7 +420,7 @@ async function initAdMob() {
 
 async function showInterstitialAd() {
   try {
-    const { AdMob } = Capacitor.Plugins;
+    const AdMob = Capacitor.Plugins.AdMob;
     if (!AdMob) return;
     
     await AdMob.prepareInterstitial({ adId: INTERSTITIAL_AD_ID });
@@ -479,10 +433,7 @@ async function showInterstitialAd() {
 // ========================================
 // 初期化
 // ========================================
-document.addEventListener('DOMContentLoaded', () => {
-  // 初期画面を表示
+document.addEventListener('DOMContentLoaded', function() {
   showHome();
-  
-  // AdMob初期化
   initAdMob();
 });
