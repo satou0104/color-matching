@@ -251,7 +251,8 @@ function startStage(stageId) {
   hintBtn.style.cursor = 'pointer';
   
   // 色の近さメーターを非表示
-  document.getElementById('color-diff-meter').style.display = 'none';
+  const meterElement = document.getElementById('color-diff-meter');
+  meterElement.classList.remove('visible');
   
   // 色を更新
   updateCurrentColor();
@@ -426,7 +427,8 @@ function applyHint() {
   hintUsed = true;
   
   // 色の近さメーターを表示
-  document.getElementById('color-diff-meter').style.display = 'flex';
+  const meterElement = document.getElementById('color-diff-meter');
+  meterElement.classList.add('visible');
   
   // ヒントボタンをグレーアウト
   const hintBtn = document.querySelector('.btn-hint');
