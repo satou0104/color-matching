@@ -472,15 +472,6 @@ async function showInterstitialAd() {
 // 初期化
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-  // 画面の高さを固定（iOS WebViewのviewport変動対策）
-  const setVH = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
-  
-  setVH();
-  window.addEventListener('resize', setVH);
-  
   // 初期画面を表示
   showHome();
   
