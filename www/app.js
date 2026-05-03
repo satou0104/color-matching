@@ -360,17 +360,28 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) return;
-  
-  // iOS WebView: position:fixed のオーバーレイがタッチイベントを壊すため
-  // ネイティブのconfirmダイアログを使用
-  var result = confirm('ヒントを使用しますか？\n色の近さメーターを表示します\n\n※広告が表示されます');
-  if (result) {
-    useHint();
-  }
+  document.getElementById('hint-desc').textContent = '色の近さメーターを表示します';
+  document.getElementById('hint-dialog').classList.add('active');
 }
 
 function closeHintDialog() {
   document.getElementById('hint-dialog').classList.remove('active');
+}
+
+function fixSliderTouch() {
+  // iOS WebView: dialog-overlay表示後にタッチイベントが壊れる問題の修正
+  // スライダーを一度DOMから外して戻すことでタッチターゲットを再計算させる
+  var sliders = document.querySelectorAll('.slider');
+  sliders.forEach(function(slider) {
+    var parent = slider.parentNode;
+    var next = slider.nextSibling;
+    parent.removeChild(slider);
+    if (next) {
+      parent.insertBefore(slider, next);
+    } else {
+      parent.appendChild(slider);
+    }
+  });
 }
 
 async function useHint() {
@@ -406,6 +417,9 @@ function applyHint() {
   hintBtn.style.cursor = 'not-allowed';
   
   updateCurrentColor();
+  
+  // iOS WebView: ダイアログ表示後のタッチイベント修復
+  setTimeout(fixSliderTouch, 50);
 }
 
 // ========================================
