@@ -360,8 +360,8 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) return;
-  document.getElementById('hint-desc').textContent = '色の近さメーターを表示します';
-  document.getElementById('hint-dialog').classList.add('active');
+  // ダイアログをスキップして直接ヒント適用（iOS WebView問題調査用）
+  applyHint();
 }
 
 function closeHintDialog() {
