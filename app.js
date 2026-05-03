@@ -381,17 +381,20 @@ async function useHint() {
 }
 
 function tryShowRewardAd() {
+  // AdMobプラグインのエラーがWebViewのタッチイベントを壊すため
+  // 広告の準備・表示は一切呼ばず、直接ヒントを適用する
+  // リリース後に広告が配信開始されたら有効化する
+  applyHint();
+  
+  /* 広告配信開始後に以下のコメントを外す：
   var AdMob = null;
-  try {
-    AdMob = Capacitor.Plugins.AdMob;
-  } catch(e) {}
+  try { AdMob = Capacitor.Plugins.AdMob; } catch(e) {}
   
   if (!AdMob) {
     applyHint();
     return;
   }
   
-  // 広告準備 → 成功したら表示、失敗したらヒント適用
   AdMob.prepareRewardVideoAd({ adId: REWARD_AD_ID })
     .then(function() {
       return AdMob.showRewardVideoAd();
@@ -403,6 +406,7 @@ function tryShowRewardAd() {
       console.log('広告エラー:', e);
       applyHint();
     });
+  */
 }
 
 function applyHint() {
