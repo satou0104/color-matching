@@ -418,15 +418,8 @@ async function initAdMob() {
 }
 
 async function showInterstitialAd() {
-  try {
-    const AdMob = Capacitor.Plugins.AdMob;
-    if (!AdMob) return;
-    
-    await AdMob.prepareInterstitial({ adId: INTERSTITIAL_AD_ID });
-    await AdMob.showInterstitial();
-  } catch (e) {
-    console.log('インタースティシャル広告エラー:', e);
-  }
+  // AdMob広告表示後にWKWebViewのスライダーが操作不能になるため無効化
+  // TODO: 広告問題が解決したら有効化する
 }
 
 // ========================================
