@@ -240,8 +240,8 @@ function startStage(stageId) {
   hintBtn.style.cursor = 'pointer';
   
   document.getElementById('color-diff-meter').classList.remove('visible');
-  document.getElementById('hint-inline-dialog').classList.remove('visible');
-  document.querySelector('.game-buttons').style.display = 'flex';
+  document.getElementById('hint-backdrop').classList.remove('visible');
+  document.getElementById('hint-dialog').classList.remove('visible');
   
   updateCurrentColor();
 }
@@ -362,14 +362,13 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) return;
-  // ゲームボタンを隠してインラインダイアログを表示
-  document.querySelector('.game-buttons').style.display = 'none';
-  document.getElementById('hint-inline-dialog').classList.add('visible');
+  document.getElementById('hint-backdrop').classList.add('visible');
+  document.getElementById('hint-dialog').classList.add('visible');
 }
 
 function closeHintDialog() {
-  document.getElementById('hint-inline-dialog').classList.remove('visible');
-  document.querySelector('.game-buttons').style.display = 'flex';
+  document.getElementById('hint-backdrop').classList.remove('visible');
+  document.getElementById('hint-dialog').classList.remove('visible');
 }
 
 async function useHint() {

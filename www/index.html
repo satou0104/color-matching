@@ -127,17 +127,17 @@
         <button class="btn-hint" onclick="showHintDialog()">ヒント</button>
         <button class="btn-submit" onclick="submitAnswer()">決定</button>
       </div>
-      
-      <!-- ヒント確認（ゲーム画面内に埋め込み） -->
-      <div class="inline-dialog" id="hint-inline-dialog">
-        <div class="inline-dialog-text">
-          <span>色の近さメーターを表示します</span>
-          <span class="inline-dialog-note">※広告が表示されます</span>
-        </div>
-        <div class="inline-dialog-buttons">
-          <button class="btn-primary" onclick="useHint()">使う</button>
-          <button class="btn-secondary" onclick="closeHintDialog()">キャンセル</button>
-        </div>
+    </div>
+    
+    <!-- ヒント確認ダイアログ（ゲーム画面内にabsoluteで配置） -->
+    <div class="game-dialog-backdrop" id="hint-backdrop" onclick="closeHintDialog()"></div>
+    <div class="game-dialog" id="hint-dialog">
+      <h3>ヒントを使用しますか？</h3>
+      <p>色の近さメーターを表示します</p>
+      <p class="dialog-note">※広告が表示されます</p>
+      <div class="dialog-buttons">
+        <button class="btn-primary" onclick="useHint()">使う</button>
+        <button class="btn-secondary" onclick="closeHintDialog()">キャンセル</button>
       </div>
     </div>
   </div>
