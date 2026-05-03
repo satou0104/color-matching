@@ -427,6 +427,27 @@ body {
   display: flex;
 }
 
+.hint-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.hint-placeholder.hidden {
+  display: none;
+}
+
+.hint-placeholder-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+  opacity: 0.7;
+}
+
 .meter-label {
   font-size: 14px;
   font-weight: 600;
@@ -790,13 +811,14 @@ body {
   opacity: 0.7;
 }
 
-.dialog-buttons {
+.game-dialog .dialog-buttons {
   display: flex;
   gap: 12px;
 }
 
-.dialog-buttons button {
+.game-dialog .dialog-buttons button {
   flex: 1;
+  white-space: nowrap;
 }
 
 

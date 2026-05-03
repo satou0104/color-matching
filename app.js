@@ -240,6 +240,7 @@ function startStage(stageId) {
   hintBtn.style.cursor = 'pointer';
   
   document.getElementById('color-diff-meter').classList.remove('visible');
+  document.getElementById('hint-placeholder').classList.remove('hidden');
   document.getElementById('hint-backdrop').classList.remove('visible');
   document.getElementById('hint-dialog').classList.remove('visible');
   
@@ -412,6 +413,8 @@ function tryShowRewardAd() {
 function applyHint() {
   hintUsed = true;
   
+  // プレースホルダーを隠してメーターを表示
+  document.getElementById('hint-placeholder').classList.add('hidden');
   document.getElementById('color-diff-meter').classList.add('visible');
   
   var hintBtn = document.querySelector('.btn-hint');
