@@ -788,3 +788,46 @@ body {
 .dialog-buttons button {
   flex: 1;
 }
+
+
+/* インラインダイアログ（ゲーム画面内埋め込み） */
+.inline-dialog {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.inline-dialog.visible {
+  display: flex;
+}
+
+.inline-dialog-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inline-dialog-text span {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.inline-dialog-note {
+  font-size: 12px !important;
+  opacity: 0.7;
+}
+
+.inline-dialog-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.inline-dialog-buttons button {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 14px;
+}

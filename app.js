@@ -240,6 +240,8 @@ function startStage(stageId) {
   hintBtn.style.cursor = 'pointer';
   
   document.getElementById('color-diff-meter').classList.remove('visible');
+  document.getElementById('hint-inline-dialog').classList.remove('visible');
+  document.querySelector('.game-buttons').style.display = 'flex';
   
   updateCurrentColor();
 }
@@ -360,28 +362,14 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) return;
-  document.getElementById('hint-desc').textContent = '色の近さメーターを表示します';
-  document.getElementById('hint-dialog').classList.add('active');
+  // ゲームボタンを隠してインラインダイアログを表示
+  document.querySelector('.game-buttons').style.display = 'none';
+  document.getElementById('hint-inline-dialog').classList.add('visible');
 }
 
 function closeHintDialog() {
-  document.getElementById('hint-dialog').classList.remove('active');
-}
-
-function fixSliderTouch() {
-  // iOS WebView: dialog-overlay表示後にタッチイベントが壊れる問題の修正
-  // スライダーを一度DOMから外して戻すことでタッチターゲットを再計算させる
-  var sliders = document.querySelectorAll('.slider');
-  sliders.forEach(function(slider) {
-    var parent = slider.parentNode;
-    var next = slider.nextSibling;
-    parent.removeChild(slider);
-    if (next) {
-      parent.insertBefore(slider, next);
-    } else {
-      parent.appendChild(slider);
-    }
-  });
+  document.getElementById('hint-inline-dialog').classList.remove('visible');
+  document.querySelector('.game-buttons').style.display = 'flex';
 }
 
 async function useHint() {
@@ -417,9 +405,6 @@ function applyHint() {
   hintBtn.style.cursor = 'not-allowed';
   
   updateCurrentColor();
-  
-  // iOS WebView: ダイアログ表示後のタッチイベント修復
-  setTimeout(fixSliderTouch, 50);
 }
 
 // ========================================
