@@ -453,11 +453,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   padding: 12px;
   background: var(--surface);
   border-radius: 12px;
   border: 1px solid var(--border);
+}
+
+.standards-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.standards-values {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .standard-item {

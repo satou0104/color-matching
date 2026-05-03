@@ -26,23 +26,28 @@ function generateStages() {
   const stages = [];
   
   for (let i = 1; i <= 100; i++) {
-    let difficulty, tolerance;
+    let difficulty, goldThreshold, silverThreshold, bronzeThreshold;
     
-    if (i <= 20) {
+    if (i <= 30) {
       difficulty = 'easy';
-      tolerance = 30;
-    } else if (i <= 40) {
-      difficulty = 'normal';
-      tolerance = 20;
+      goldThreshold = 10;
+      silverThreshold = 20;
+      bronzeThreshold = 30;
     } else if (i <= 60) {
+      difficulty = 'normal';
+      goldThreshold = 8;
+      silverThreshold = 15;
+      bronzeThreshold = 25;
+    } else if (i <= 90) {
       difficulty = 'hard';
-      tolerance = 15;
-    } else if (i <= 80) {
-      difficulty = 'expert';
-      tolerance = 10;
+      goldThreshold = 5;
+      silverThreshold = 10;
+      bronzeThreshold = 15;
     } else {
       difficulty = 'master';
-      tolerance = 5;
+      goldThreshold = 3;
+      silverThreshold = 5;
+      bronzeThreshold = 10;
     }
     
     // ランダムな目標色を生成
@@ -58,7 +63,9 @@ function generateStages() {
     stages.push({
       id: i,
       targetColor,
-      tolerance,
+      goldThreshold,
+      silverThreshold,
+      bronzeThreshold,
       difficulty
     });
   }
@@ -81,10 +88,10 @@ function calculateColorDifference(color1, color2) {
 // ========================================
 // 星評価判定（銅・銀・金）
 // ========================================
-function getStars(colorDiff) {
-  if (colorDiff <= 5) return 3;   // 金
-  if (colorDiff <= 10) return 2;  // 銀
-  if (colorDiff <= 15) return 1;  // 銅
+function getStars(colorDiff, stage) {
+  if (colorDiff <= stage.goldThreshold) return 3;   // 金
+  if (colorDiff <= stage.silverThreshold) return 2;  // 銀
+  if (colorDiff <= stage.bronzeThreshold) return 1;  // 銅
   return 0; // 失敗
 }
 
@@ -220,6 +227,11 @@ function startStage(stageId) {
   // ステージ情報表示
   document.getElementById('stage-title').textContent = `Stage ${stageId}`;
   
+  // 色差基準を表示
+  document.querySelector('.standard-item.gold .value').textContent = stage.goldThreshold;
+  document.querySelector('.standard-item.silver .value').textContent = stage.silverThreshold;
+  document.querySelector('.standard-item.bronze .value').textContent = stage.bronzeThreshold;
+  
   // 目標色を表示
   const targetBox = document.getElementById('target-color');
   targetBox.style.backgroundColor = `rgb(${stage.targetColor.r}, ${stage.targetColor.g}, ${stage.targetColor.b})`;
@@ -304,13 +316,13 @@ function submitAnswer() {
     stage.targetColor
   );
   
-  const stars = getStars(diff);
+  const stars = getStars(diff, stage);
   
   if (stars > 0) {
     // 銅以上でクリア
     saveBestScore(currentStage, { diff: Math.round(diff), stars });
     consecutiveClear++;
-    showClearScreen(stars, Math.round(diff), stage.tolerance);
+    showClearScreen(stars, Math.round(diff), stage.bronzeThreshold);
     
     // 5ステージ連続クリアでインタースティシャル広告
     if (consecutiveClear % 5 === 0) {
@@ -320,7 +332,7 @@ function submitAnswer() {
     }
   } else {
     // 銅未満は失敗
-    showFailScreen(Math.round(diff), stage.tolerance);
+    showFailScreen(Math.round(diff), stage.bronzeThreshold);
   }
 }
 
