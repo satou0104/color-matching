@@ -395,28 +395,32 @@ function tryShowRewardAd() {
       return AdMob.showRewardVideoAd();
     })
     .then(function(rewardItem) {
-      rebuildSliders();
+      fixViewportAfterAd();
       applyHint();
     })
     .catch(function(e) {
       console.log('広告エラー:', e);
-      rebuildSliders();
+      fixViewportAfterAd();
       applyHint();
     });
 }
 
-// 広告表示後にスライダーを再生成してタッチイベントを復活させる
-function rebuildSliders() {
-  var ids = ['r-slider', 'g-slider', 'b-slider'];
-  ids.forEach(function(id) {
-    var old = document.getElementById(id);
-    var val = old.value;
-    var parent = old.parentNode;
-    var newSlider = old.cloneNode(true);
-    newSlider.value = val;
-    parent.replaceChild(newSlider, old);
-    newSlider.addEventListener('input', updateCurrentColor);
-  });
+// 広告表示後にviewportを強制リセット
+function fixViewportAfterAd() {
+  // セーフエリアのpaddingを一度0にしてから戻す（再計算を強制）
+  var screen = document.getElementById('game-screen');
+  screen.style.paddingTop = '0px';
+  screen.style.paddingBottom = '0px';
+  
+  // 強制リフロー
+  void screen.offsetHeight;
+  
+  // セーフエリアを再適用
+  screen.style.paddingTop = '';
+  screen.style.paddingBottom = '';
+  
+  // scrollToで位置をリセット
+  window.scrollTo(0, 0);
 }
 
 function applyHint() {
