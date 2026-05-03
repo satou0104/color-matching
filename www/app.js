@@ -5,8 +5,8 @@ let currentStage = 1;
 let consecutiveClear = 0;
 let hintUsed = false; // 色の近さメーター表示フラグ
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-8707369701475326/2504085461'; // インタースティシャル
-const REWARD_AD_ID = 'ca-app-pub-8707369701475326/9261065507'; // リワード
+const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/4411468910'; // テスト用インタースティシャル
+const REWARD_AD_ID = 'ca-app-pub-3940256099942544/1712485313'; // テスト用リワード
 
 // ========================================
 // 乱数生成（固定シード）
@@ -382,12 +382,6 @@ async function useHint() {
 }
 
 function tryShowRewardAd() {
-  // AdMobプラグインのエラーがWebViewのタッチイベントを壊すため
-  // 広告の準備・表示は一切呼ばず、直接ヒントを適用する
-  // リリース後に広告が配信開始されたら有効化する
-  applyHint();
-  
-  /* 広告配信開始後に以下のコメントを外す：
   var AdMob = null;
   try { AdMob = Capacitor.Plugins.AdMob; } catch(e) {}
   
@@ -407,7 +401,6 @@ function tryShowRewardAd() {
       console.log('広告エラー:', e);
       applyHint();
     });
-  */
 }
 
 function applyHint() {
