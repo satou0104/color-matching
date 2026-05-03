@@ -1,7 +1,7 @@
 {
-  "name": "color-matching",
+  "name": "colorful-match",
   "version": "1.0.0",
-  "description": "カラーマッチング - RGB色合わせパズルゲーム",
+  "description": "カラフルマッチ - RGB色合わせパズルゲーム",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
