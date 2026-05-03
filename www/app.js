@@ -5,8 +5,8 @@ let currentStage = 1;
 let consecutiveClear = 0;
 let hintUsed = false; // 色の近さメーター表示フラグ
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-8707369701475326/XXXXXXXXXX'; // 本番用に変更
-const REWARD_AD_ID = 'ca-app-pub-8707369701475326/YYYYYYYYYY'; // 本番用に変更
+const INTERSTITIAL_AD_ID = 'ca-app-pub-8707369701475326/2504085461'; // インタースティシャル
+const REWARD_AD_ID = 'ca-app-pub-8707369701475326/9261065507'; // リワード
 
 // ========================================
 // 乱数生成（固定シード）
