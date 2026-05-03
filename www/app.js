@@ -438,10 +438,16 @@ function applyHint() {
   
   // 現在の色差を更新
   updateCurrentColor();
+  
+  // iOS WebView: 広告・ダイアログ表示後のviewport変動を修正
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    const gameContent = document.querySelector('.game-content');
+    if (gameContent) gameContent.scrollTop = 0;
+  }, 100);
 }
-
-// ========================================
-// AdMob初期化
 // ========================================
 async function initAdMob() {
   try {
