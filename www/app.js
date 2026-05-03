@@ -5,8 +5,8 @@ let currentStage = 1;
 let consecutiveClear = 0;
 let hintUsed = false; // 色の近さメーター表示フラグ
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-8707369701475326/2504085461'; // インタースティシャル
-const REWARD_AD_ID = 'ca-app-pub-8707369701475326/9261065507'; // リワード
+const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/4411468910'; // テスト用
+const REWARD_AD_ID = 'ca-app-pub-3940256099942544/1712485313'; // テスト用
 
 // ========================================
 // 乱数生成（固定シード）
@@ -382,9 +382,41 @@ async function useHint() {
 }
 
 function tryShowRewardAd() {
-  // AdMob広告表示後にWKWebViewのスライダーが操作不能になるため無効化
-  // TODO: 広告問題が解決したら有効化する
-  applyHint();
+  var AdMob = null;
+  try { AdMob = Capacitor.Plugins.AdMob; } catch(e) {}
+  
+  if (!AdMob) {
+    applyHint();
+    return;
+  }
+  
+  AdMob.prepareRewardVideoAd({ adId: REWARD_AD_ID })
+    .then(function() {
+      return AdMob.showRewardVideoAd();
+    })
+    .then(function(rewardItem) {
+      rebuildSliders();
+      applyHint();
+    })
+    .catch(function(e) {
+      console.log('広告エラー:', e);
+      rebuildSliders();
+      applyHint();
+    });
+}
+
+// 広告表示後にスライダーを再生成してタッチイベントを復活させる
+function rebuildSliders() {
+  var ids = ['r-slider', 'g-slider', 'b-slider'];
+  ids.forEach(function(id) {
+    var old = document.getElementById(id);
+    var val = old.value;
+    var parent = old.parentNode;
+    var newSlider = old.cloneNode(true);
+    newSlider.value = val;
+    parent.replaceChild(newSlider, old);
+    newSlider.addEventListener('input', updateCurrentColor);
+  });
 }
 
 function applyHint() {
