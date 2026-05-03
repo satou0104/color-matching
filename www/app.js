@@ -287,6 +287,37 @@ function updateColorDiffMeter(diff) {
 }
 
 // スライダーイベント
+// iOS WebView: AdMob広告表示後にinput[type=range]のドラッグが効かなくなる問題の対策
+// touchイベントで直接スライダーの値を制御する
+function setupSliderTouch(sliderId) {
+  var slider = document.getElementById(sliderId);
+  
+  function getValueFromTouch(e) {
+    var touch = e.touches[0];
+    var rect = slider.getBoundingClientRect();
+    var x = touch.clientX - rect.left;
+    var ratio = Math.max(0, Math.min(1, x / rect.width));
+    var min = parseInt(slider.min);
+    var max = parseInt(slider.max);
+    return Math.round(min + ratio * (max - min));
+  }
+  
+  slider.addEventListener('touchstart', function(e) {
+    slider.value = getValueFromTouch(e);
+    updateCurrentColor();
+  }, { passive: true });
+  
+  slider.addEventListener('touchmove', function(e) {
+    slider.value = getValueFromTouch(e);
+    updateCurrentColor();
+  }, { passive: true });
+}
+
+setupSliderTouch('r-slider');
+setupSliderTouch('g-slider');
+setupSliderTouch('b-slider');
+
+// 通常のinputイベントも残す（ブラウザテスト用）
 document.getElementById('r-slider').addEventListener('input', updateCurrentColor);
 document.getElementById('g-slider').addEventListener('input', updateCurrentColor);
 document.getElementById('b-slider').addEventListener('input', updateCurrentColor);
