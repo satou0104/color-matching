@@ -244,6 +244,12 @@ function startStage(stageId) {
   // ヒント使用状況をリセット
   hintUsed = false;
   
+  // ヒントボタンを有効化
+  const hintBtn = document.querySelector('.btn-hint');
+  hintBtn.disabled = false;
+  hintBtn.style.opacity = '1';
+  hintBtn.style.cursor = 'pointer';
+  
   // 色の近さメーターを非表示
   document.getElementById('color-diff-meter').style.display = 'none';
   
@@ -383,8 +389,7 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) {
-    alert('ヒントは既に使用済みです');
-    return;
+    return; // 既に使用済みの場合は何もしない
   }
   
   document.getElementById('hint-desc').textContent = '色の近さメーターを表示します';
@@ -422,6 +427,12 @@ function applyHint() {
   
   // 色の近さメーターを表示
   document.getElementById('color-diff-meter').style.display = 'flex';
+  
+  // ヒントボタンをグレーアウト
+  const hintBtn = document.querySelector('.btn-hint');
+  hintBtn.disabled = true;
+  hintBtn.style.opacity = '0.5';
+  hintBtn.style.cursor = 'not-allowed';
   
   // 現在の色差を更新
   updateCurrentColor();

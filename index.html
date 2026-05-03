@@ -133,11 +133,11 @@
   <!-- クリア画面 -->
   <div class="screen" id="clear-screen">
     <div class="clear-content">
-      <h2>クリア！</h2>
+      <h2>CLEAR</h2>
       <div class="stars" id="clear-stars"></div>
       <div class="clear-stats">
         <p>色差: <span id="clear-diff">0</span></p>
-        <p>銅基準: <span id="clear-tolerance">15</span> 以内</p>
+        <p class="clear-threshold">色差<span id="clear-tolerance">15</span>以内でクリア</p>
       </div>
       <div class="clear-buttons">
         <button class="btn-primary" onclick="nextStage()">次のステージ</button>
@@ -149,11 +149,11 @@
   <!-- 失敗画面 -->
   <div class="screen" id="fail-screen">
     <div class="fail-content">
-      <h2>失敗</h2>
-      <p>クリア基準に届きませんでした</p>
+      <h2>FAILED</h2>
+      <p class="fail-message">基準に届きませんでした</p>
       <div class="fail-stats">
         <p>色差: <span id="fail-diff">0</span></p>
-        <p>銅基準: <span id="fail-tolerance">15</span> 以内</p>
+        <p class="fail-threshold">色差<span id="fail-tolerance">15</span>以内でクリア</p>
       </div>
       <div class="fail-buttons">
         <button class="btn-primary" onclick="retryStage()">リトライ</button>
@@ -179,14 +179,15 @@
       
       <h3>操作方法</h3>
       <p>・R（赤）・G（緑）・B（青）のスライダーを動かして色を作ります</p>
-      <p>・色の近さメーターで目標との差を確認できます</p>
       <p>・決定ボタンを押してクリア！</p>
       
       <h3>評価基準</h3>
-      <p>金: 色差5以内（完璧）</p>
-      <p>銀: 色差10以内（素晴らしい）</p>
-      <p>銅: 色差15以内（クリア）</p>
-      <p>失敗: 色差15より大きい</p>
+      <p>ステージごとに基準が変わります</p>
+      <p>・ステージ1-30: ★★★10 / ★★20 / ★30</p>
+      <p>・ステージ31-60: ★★★8 / ★★15 / ★25</p>
+      <p>・ステージ61-90: ★★★5 / ★★10 / ★15</p>
+      <p>・ステージ91-100: ★★★3 / ★★5 / ★10</p>
+      <p>※★基準以内でクリア、それ以外は失敗</p>
       
       <h3>ヒント機能</h3>
       <p>困ったときはヒントボタンで色の近さメーターを表示できます</p>
@@ -199,6 +200,7 @@
     <div class="dialog-box">
       <h3>ヒントを使用しますか？</h3>
       <p id="hint-desc">色の近さメーターを表示します</p>
+      <p class="dialog-note">※広告が表示されます</p>
       <div class="dialog-buttons">
         <button class="btn-primary" onclick="useHint()">使う</button>
         <button class="btn-secondary" onclick="closeHintDialog()">キャンセル</button>
