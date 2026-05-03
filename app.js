@@ -360,8 +360,13 @@ function retryStage() {
 // ========================================
 function showHintDialog() {
   if (hintUsed) return;
-  // ダイアログをスキップして直接ヒント適用（iOS WebView問題調査用）
-  applyHint();
+  
+  // iOS WebView: position:fixed のオーバーレイがタッチイベントを壊すため
+  // ネイティブのconfirmダイアログを使用
+  var result = confirm('ヒントを使用しますか？\n色の近さメーターを表示します\n\n※広告が表示されます');
+  if (result) {
+    useHint();
+  }
 }
 
 function closeHintDialog() {
