@@ -418,6 +418,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .meter-label {
@@ -433,6 +435,7 @@ body {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--border);
+  pointer-events: none;
 }
 
 .meter-fill {
@@ -440,6 +443,7 @@ body {
   background: linear-gradient(to right, var(--success), var(--warning), var(--danger));
   transition: width 0.3s ease;
   width: 0%;
+  pointer-events: none;
 }
 
 .meter-text {
@@ -447,6 +451,7 @@ body {
   text-align: center;
   color: var(--text-dim);
   font-weight: 600;
+  pointer-events: none;
 }
 
 /* メダル基準表示 */
@@ -518,6 +523,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+  z-index: 10;
 }
 
 .slider-group {
@@ -557,6 +564,8 @@ body {
   border-radius: 4px;
   outline: none;
   cursor: pointer;
+  position: relative;
+  z-index: 10;
 }
 
 .slider::-webkit-slider-thumb {
@@ -568,6 +577,8 @@ body {
   background: white;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
 }
 
 .slider::-moz-range-thumb {
