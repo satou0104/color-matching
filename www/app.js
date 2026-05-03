@@ -374,23 +374,10 @@ function closeHintDialog() {
 async function useHint() {
   closeHintDialog();
   
-  try {
-    const AdMob = Capacitor.Plugins.AdMob;
-    if (!AdMob) {
-      applyHint();
-      return;
-    }
-    
-    await AdMob.prepareRewardVideoAd({ adId: REWARD_AD_ID });
-    const rewardItem = await AdMob.showRewardVideoAd();
-    
-    if (rewardItem) {
-      applyHint();
-    }
-  } catch (e) {
-    console.log('広告エラー:', e);
+  // 少し待ってからヒント適用（ダイアログ閉じアニメーション完了後）
+  setTimeout(function() {
     applyHint();
-  }
+  }, 350);
 }
 
 function applyHint() {
