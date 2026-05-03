@@ -5,8 +5,8 @@ let currentStage = 1;
 let consecutiveClear = 0;
 let hintUsed = false; // 色の近さメーター表示フラグ
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/4411468910'; // テスト用インタースティシャル
-const REWARD_AD_ID = 'ca-app-pub-3940256099942544/1712485313'; // テスト用リワード
+const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/4411468910'; // テスト用
+const REWARD_AD_ID = 'ca-app-pub-3940256099942544/1712485313'; // テスト用
 
 // ========================================
 // 乱数生成（固定シード）
@@ -228,9 +228,9 @@ function startStage(stageId) {
   const targetBox = document.getElementById('target-color');
   targetBox.style.backgroundColor = 'rgb(' + stage.targetColor.r + ', ' + stage.targetColor.g + ', ' + stage.targetColor.b + ')';
   
-  document.getElementById('r-slider').value = 128;
-  document.getElementById('g-slider').value = 128;
-  document.getElementById('b-slider').value = 128;
+  rgbValues.r = 128;
+  rgbValues.g = 128;
+  rgbValues.b = 128;
   
   hintUsed = false;
   
@@ -247,21 +247,29 @@ function startStage(stageId) {
   updateCurrentColor();
 }
 
+// RGB値の管理
+var rgbValues = { r: 128, g: 128, b: 128 };
+
 function updateCurrentColor() {
-  const r = parseInt(document.getElementById('r-slider').value);
-  const g = parseInt(document.getElementById('g-slider').value);
-  const b = parseInt(document.getElementById('b-slider').value);
+  var r = rgbValues.r;
+  var g = rgbValues.g;
+  var b = rgbValues.b;
   
-  const currentBox = document.getElementById('current-color');
+  var currentBox = document.getElementById('current-color');
   currentBox.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ')';
   
   document.getElementById('r-value').textContent = r;
   document.getElementById('g-value').textContent = g;
   document.getElementById('b-value').textContent = b;
   
+  // バーの幅を更新
+  document.getElementById('r-bar-fill').style.width = (r / 255 * 100) + '%';
+  document.getElementById('g-bar-fill').style.width = (g / 255 * 100) + '%';
+  document.getElementById('b-bar-fill').style.width = (b / 255 * 100) + '%';
+  
   if (hintUsed) {
-    const stage = stages[currentStage - 1];
-    const diff = calculateColorDifference({ r, g, b }, stage.targetColor);
+    var stage = stages[currentStage - 1];
+    var diff = calculateColorDifference({ r: r, g: g, b: b }, stage.targetColor);
     updateColorDiffMeter(diff);
   }
 }
@@ -286,49 +294,86 @@ function updateColorDiffMeter(diff) {
   }
 }
 
-// スライダーイベント
-// iOS WebView: AdMob広告表示後にinput[type=range]のドラッグが効かなくなる問題の対策
-// touchイベントで直接スライダーの値を制御する
-function setupSliderTouch(sliderId) {
-  var slider = document.getElementById(sliderId);
-  
-  function getValueFromTouch(e) {
-    var touch = e.touches[0];
-    var rect = slider.getBoundingClientRect();
-    var x = touch.clientX - rect.left;
-    var ratio = Math.max(0, Math.min(1, x / rect.width));
-    var min = parseInt(slider.min);
-    var max = parseInt(slider.max);
-    return Math.round(min + ratio * (max - min));
-  }
-  
-  slider.addEventListener('touchstart', function(e) {
-    slider.value = getValueFromTouch(e);
-    updateCurrentColor();
-  }, { passive: true });
-  
-  slider.addEventListener('touchmove', function(e) {
-    slider.value = getValueFromTouch(e);
-    updateCurrentColor();
-  }, { passive: true });
+// 矢印ボタンの処理
+var holdInterval = null;
+var holdSpeed = 1;
+
+function adjustValue(channel, direction) {
+  rgbValues[channel] = Math.max(0, Math.min(255, rgbValues[channel] + direction * holdSpeed));
+  updateCurrentColor();
 }
 
-setupSliderTouch('r-slider');
-setupSliderTouch('g-slider');
-setupSliderTouch('b-slider');
+function startHold(channel, direction) {
+  holdSpeed = 1;
+  adjustValue(channel, direction);
+  
+  var holdCount = 0;
+  holdInterval = setInterval(function() {
+    holdCount++;
+    if (holdCount > 20) {
+      holdSpeed = 5;
+    } else if (holdCount > 10) {
+      holdSpeed = 2;
+    }
+    adjustValue(channel, direction);
+  }, 50);
+}
 
-// 通常のinputイベントも残す（ブラウザテスト用）
-document.getElementById('r-slider').addEventListener('input', updateCurrentColor);
-document.getElementById('g-slider').addEventListener('input', updateCurrentColor);
-document.getElementById('b-slider').addEventListener('input', updateCurrentColor);
+function stopHold() {
+  if (holdInterval) {
+    clearInterval(holdInterval);
+    holdInterval = null;
+  }
+  holdSpeed = 1;
+}
+
+// バーのタップで直接値を設定
+function onBarTap(channel, e) {
+  var bar = e.currentTarget.querySelector('.slider-bar');
+  var rect = bar.getBoundingClientRect();
+  var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  var ratio = Math.max(0, Math.min(1, x / rect.width));
+  rgbValues[channel] = Math.round(ratio * 255);
+  updateCurrentColor();
+}
+
+// ボタンイベント設定
+document.querySelectorAll('.slider-btn').forEach(function(btn) {
+  var channel = btn.getAttribute('data-slider');
+  var dir = parseInt(btn.getAttribute('data-dir'));
+  
+  btn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    startHold(channel, dir);
+  });
+  btn.addEventListener('touchend', stopHold);
+  btn.addEventListener('touchcancel', stopHold);
+  
+  btn.addEventListener('mousedown', function() { startHold(channel, dir); });
+  btn.addEventListener('mouseup', stopHold);
+  btn.addEventListener('mouseleave', stopHold);
+});
+
+// バータップイベント
+document.querySelectorAll('.slider-bar-wrap').forEach(function(wrap) {
+  var label = wrap.closest('.slider-group').querySelector('.slider-label').textContent.trim().toLowerCase();
+  
+  wrap.addEventListener('touchstart', function(e) {
+    onBarTap(label, e);
+  }, { passive: true });
+  
+  wrap.addEventListener('click', function(e) {
+    onBarTap(label, e);
+  });
+});
 
 // ========================================
 // 回答送信
 // ========================================
 function submitAnswer() {
-  const r = parseInt(document.getElementById('r-slider').value);
-  const g = parseInt(document.getElementById('g-slider').value);
-  const b = parseInt(document.getElementById('b-slider').value);
+  var r = rgbValues.r;
+  var g = rgbValues.g;
+  var b = rgbValues.b;
   
   const stage = stages[currentStage - 1];
   const diff = calculateColorDifference({ r, g, b }, stage.targetColor);
