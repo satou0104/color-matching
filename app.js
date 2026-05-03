@@ -5,8 +5,8 @@ let currentStage = 1;
 let consecutiveClear = 0;
 let hintUsed = false; // 色の近さメーター表示フラグ
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/4411468910'; // テスト用
-const REWARD_AD_ID = 'ca-app-pub-3940256099942544/1712485313'; // テスト用
+const INTERSTITIAL_AD_ID = 'ca-app-pub-8707369701475326/2504085461'; // インタースティシャル
+const REWARD_AD_ID = 'ca-app-pub-8707369701475326/9261065507'; // リワード
 
 // ========================================
 // 乱数生成（固定シード）
@@ -228,9 +228,9 @@ function startStage(stageId) {
   const targetBox = document.getElementById('target-color');
   targetBox.style.backgroundColor = 'rgb(' + stage.targetColor.r + ', ' + stage.targetColor.g + ', ' + stage.targetColor.b + ')';
   
-  rgbValues.r = 128;
-  rgbValues.g = 128;
-  rgbValues.b = 128;
+  document.getElementById('r-slider').value = 128;
+  document.getElementById('g-slider').value = 128;
+  document.getElementById('b-slider').value = 128;
   
   hintUsed = false;
   
@@ -247,13 +247,10 @@ function startStage(stageId) {
   updateCurrentColor();
 }
 
-// RGB値の管理
-var rgbValues = { r: 128, g: 128, b: 128 };
-
 function updateCurrentColor() {
-  var r = rgbValues.r;
-  var g = rgbValues.g;
-  var b = rgbValues.b;
+  var r = parseInt(document.getElementById('r-slider').value);
+  var g = parseInt(document.getElementById('g-slider').value);
+  var b = parseInt(document.getElementById('b-slider').value);
   
   var currentBox = document.getElementById('current-color');
   currentBox.style.backgroundColor = 'rgb(' + r + ', ' + g + ', ' + b + ')';
@@ -261,11 +258,6 @@ function updateCurrentColor() {
   document.getElementById('r-value').textContent = r;
   document.getElementById('g-value').textContent = g;
   document.getElementById('b-value').textContent = b;
-  
-  // バーの幅を更新
-  document.getElementById('r-bar-fill').style.width = (r / 255 * 100) + '%';
-  document.getElementById('g-bar-fill').style.width = (g / 255 * 100) + '%';
-  document.getElementById('b-bar-fill').style.width = (b / 255 * 100) + '%';
   
   if (hintUsed) {
     var stage = stages[currentStage - 1];
@@ -294,86 +286,18 @@ function updateColorDiffMeter(diff) {
   }
 }
 
-// 矢印ボタンの処理
-var holdInterval = null;
-var holdSpeed = 1;
-
-function adjustValue(channel, direction) {
-  rgbValues[channel] = Math.max(0, Math.min(255, rgbValues[channel] + direction * holdSpeed));
-  updateCurrentColor();
-}
-
-function startHold(channel, direction) {
-  holdSpeed = 1;
-  adjustValue(channel, direction);
-  
-  var holdCount = 0;
-  holdInterval = setInterval(function() {
-    holdCount++;
-    if (holdCount > 20) {
-      holdSpeed = 5;
-    } else if (holdCount > 10) {
-      holdSpeed = 2;
-    }
-    adjustValue(channel, direction);
-  }, 50);
-}
-
-function stopHold() {
-  if (holdInterval) {
-    clearInterval(holdInterval);
-    holdInterval = null;
-  }
-  holdSpeed = 1;
-}
-
-// バーのタップで直接値を設定
-function onBarTap(channel, e) {
-  var bar = e.currentTarget.querySelector('.slider-bar');
-  var rect = bar.getBoundingClientRect();
-  var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-  var ratio = Math.max(0, Math.min(1, x / rect.width));
-  rgbValues[channel] = Math.round(ratio * 255);
-  updateCurrentColor();
-}
-
-// ボタンイベント設定
-document.querySelectorAll('.slider-btn').forEach(function(btn) {
-  var channel = btn.getAttribute('data-slider');
-  var dir = parseInt(btn.getAttribute('data-dir'));
-  
-  btn.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    startHold(channel, dir);
-  });
-  btn.addEventListener('touchend', stopHold);
-  btn.addEventListener('touchcancel', stopHold);
-  
-  btn.addEventListener('mousedown', function() { startHold(channel, dir); });
-  btn.addEventListener('mouseup', stopHold);
-  btn.addEventListener('mouseleave', stopHold);
-});
-
-// バータップイベント
-document.querySelectorAll('.slider-bar-wrap').forEach(function(wrap) {
-  var label = wrap.closest('.slider-group').querySelector('.slider-label').textContent.trim().toLowerCase();
-  
-  wrap.addEventListener('touchstart', function(e) {
-    onBarTap(label, e);
-  }, { passive: true });
-  
-  wrap.addEventListener('click', function(e) {
-    onBarTap(label, e);
-  });
-});
+// スライダーイベント
+document.getElementById('r-slider').addEventListener('input', updateCurrentColor);
+document.getElementById('g-slider').addEventListener('input', updateCurrentColor);
+document.getElementById('b-slider').addEventListener('input', updateCurrentColor);
 
 // ========================================
 // 回答送信
 // ========================================
 function submitAnswer() {
-  var r = rgbValues.r;
-  var g = rgbValues.g;
-  var b = rgbValues.b;
+  var r = parseInt(document.getElementById('r-slider').value);
+  var g = parseInt(document.getElementById('g-slider').value);
+  var b = parseInt(document.getElementById('b-slider').value);
   
   const stage = stages[currentStage - 1];
   const diff = calculateColorDifference({ r, g, b }, stage.targetColor);
@@ -458,25 +382,9 @@ async function useHint() {
 }
 
 function tryShowRewardAd() {
-  var AdMob = null;
-  try { AdMob = Capacitor.Plugins.AdMob; } catch(e) {}
-  
-  if (!AdMob) {
-    applyHint();
-    return;
-  }
-  
-  AdMob.prepareRewardVideoAd({ adId: REWARD_AD_ID })
-    .then(function() {
-      return AdMob.showRewardVideoAd();
-    })
-    .then(function(rewardItem) {
-      applyHint();
-    })
-    .catch(function(e) {
-      console.log('広告エラー:', e);
-      applyHint();
-    });
+  // AdMob広告表示後にWKWebViewのスライダーが操作不能になるため無効化
+  // TODO: 広告問題が解決したら有効化する
+  applyHint();
 }
 
 function applyHint() {
