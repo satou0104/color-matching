@@ -133,7 +133,7 @@ function getClearedStages() {
 // 画面遷移
 // ========================================
 function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => {
+  document.querySelectorAll('.screen').forEach(function(s) {
     s.classList.remove('active');
   });
   document.getElementById(screenId).classList.add('active');
