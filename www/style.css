@@ -50,8 +50,6 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
   transform: translateY(20px);
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .screen.active {
