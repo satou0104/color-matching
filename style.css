@@ -423,6 +423,7 @@ body {
   display: none;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 8px;
 }
 
 .color-diff-meter.visible {
@@ -450,11 +451,18 @@ body {
   opacity: 0.7;
 }
 
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
 .meter-label {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-dim);
-  text-align: center;
+  white-space: nowrap;
 }
 
 .meter-bar-container {
@@ -500,11 +508,12 @@ body {
 }
 
 .meter-text {
-  font-size: 15px;
-  text-align: center;
+  font-size: 14px;
+  text-align: right;
   color: var(--text);
   font-weight: 700;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 
