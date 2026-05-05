@@ -267,22 +267,28 @@ function updateCurrentColor() {
 }
 
 function updateColorDiffMeter(diff) {
+  // 最大色差は約441（0,0,0 から 255,255,255 の距離）
   const maxDiff = 441;
-  const percentage = Math.max(0, 100 - (diff / maxDiff * 100));
+  
+  // 色差が小さいほど左側（完璧側）に表示
+  // 色差0 = 100%、色差441 = 0%
+  const percentage = Math.max(0, Math.min(100, 100 - (diff / maxDiff * 100)));
   
   document.getElementById('meter-fill').style.width = percentage + '%';
   
   const text = document.getElementById('meter-text');
+  const matchPercentage = Math.round(percentage);
+  
   if (diff <= 5) {
-    text.textContent = '完璧！';
+    text.textContent = '完璧！（一致度: ' + matchPercentage + '%）';
   } else if (diff <= 10) {
-    text.textContent = 'とても近い！';
+    text.textContent = 'とても近い！（一致度: ' + matchPercentage + '%）';
   } else if (diff <= 20) {
-    text.textContent = '近い！';
+    text.textContent = '近い！（一致度: ' + matchPercentage + '%）';
   } else if (diff <= 40) {
-    text.textContent = 'もう少し';
+    text.textContent = 'もう少し（一致度: ' + matchPercentage + '%）';
   } else {
-    text.textContent = '調整してください';
+    text.textContent = '調整してください（一致度: ' + matchPercentage + '%）';
   }
 }
 

@@ -90,9 +90,15 @@
       </div>
       
       <div class="color-diff-meter" id="color-diff-meter">
-        <div class="meter-label">色の近さ</div>
-        <div class="meter-bar">
-          <div class="meter-fill" id="meter-fill"></div>
+        <div class="meter-label">目標色との近さ</div>
+        <div class="meter-bar-container">
+          <div class="meter-bar">
+            <div class="meter-fill" id="meter-fill"></div>
+          </div>
+          <div class="meter-labels">
+            <span class="meter-label-left">遠い</span>
+            <span class="meter-label-right">完璧</span>
+          </div>
         </div>
         <div class="meter-text" id="meter-text">調整してください</div>
       </div>
@@ -206,8 +212,10 @@
       <p>※★基準以内でクリア、それ以外は失敗</p>
       
       <h3>ヒント機能</h3>
-      <p>困ったときはヒントボタンで色の近さメーターを表示できます</p>
-      <p>メーターで目標色との距離をリアルタイムで確認できます</p>
+      <p>困ったときはヒントボタンで「目標色との近さ」メーターを表示できます</p>
+      <p>メーターで目標色との一致度をリアルタイムで確認できます</p>
+      <p>・左側（緑）に近いほど完璧に近い状態です</p>
+      <p>・右側（赤）に近いほど目標色から遠い状態です</p>
     </div>
   </div>
 
