@@ -483,7 +483,7 @@ body {
 
 .meter-fill {
   height: 100%;
-  background: var(--success);
+  background: linear-gradient(to right, var(--danger), var(--warning), var(--success));
   transition: width 0.3s ease;
   width: 0%;
   pointer-events: none;
