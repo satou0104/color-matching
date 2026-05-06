@@ -664,7 +664,7 @@ body {
 .game-buttons {
   display: flex;
   gap: 12px;
-  margin-top: auto;
+  margin-top: 16px;
 }
 
 /* クリア・失敗画面 */
